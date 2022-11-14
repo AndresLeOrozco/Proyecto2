@@ -3,9 +3,6 @@ package chatServer.data;
 import chatProtocol.Contacto;
 import chatProtocol.Message;
 import chatProtocol.User;
-import com.google.protobuf.Internal;
-
-import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

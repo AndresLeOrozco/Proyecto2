@@ -169,8 +169,7 @@ public class Controller {
         if(MensajeEnviado) {
             for (Contacto c : model.contactos) {
                 if (message.getUserDeliver().equals(c.getNombreContacto())) {
-                    c.getMensajes().add(message);
-                    c.setCantMessage(c.getCantMessage()+1);
+                    c.AgregarMensaje(message);
                     agregarMensajeAllContactos(c);
                     XMLParse.creaXML(Model.allContacts);
                     model.commit(Model.CHAT);
@@ -179,7 +178,7 @@ public class Controller {
         }else{
             for (Contacto c : model.contactos){
                 if (message.getSender().equals(c.getNombreContacto())){
-                    c.getMensajes().add(message);
+                    c.AgregarMensaje(message);
                     agregarMensajeAllContactos(c);
                     XMLParse.creaXML(Model.allContacts);
                     model.commit(Model.CHAT);

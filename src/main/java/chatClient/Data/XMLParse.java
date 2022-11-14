@@ -128,38 +128,4 @@ public class XMLParse {
         return ContactosTotales;
     }
 
-    public static void main(String[] args) {
-        List<Contacto> con = new ArrayList<>();
-        con.add(new Contacto(new ArrayList<>(),false,"Pedro","Juan"));
-        con.add(new Contacto(new ArrayList<>(),false,"Alonso","armando"));
-        con.add(new Contacto(new ArrayList<>(),false,"Suwi","uwu"));
-        List<Message> Mensajes = new ArrayList<>();
-        Message m = new Message("Juan","Que me dice gey");
-        m.setUserDeliver("Oscar");
-        Mensajes.add(m);
-        Contacto contact =new Contacto(Mensajes,false,"Medford","Mambo");
-        contact.setCantMessage(1);
-        con.add(contact);
-        XMLParse.creaXML(con);
-
-
-        try {
-            List<Contacto> conts = XMLParse.LeerXML();
-            for(Contacto c:conts){
-                System.out.println(c.getNombreDuenoContacto()+" "+c.toString());
-                for(Message mens : c.getMensajes()){
-                    System.out.println(mens.getUserDeliver()+" "+mens.getMessage());
-                }
-
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
 }
