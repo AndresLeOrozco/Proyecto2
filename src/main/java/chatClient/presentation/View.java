@@ -47,6 +47,7 @@ public class View implements Observer {
     Controller controller;
 
     public View() {
+        messages.setEditable(false);
         mensaje.setEditable(false);
         modelContactos = new DefaultListModel<>();
         loginPanel.setVisible(true);
@@ -73,6 +74,7 @@ public class View implements Observer {
                     } catch (Exception ex) {
                         id.setBackground(Color.orange);
                         clave.setBackground(Color.orange);
+                        JOptionPane.showMessageDialog(Application.window,ex.getMessage());
                     }
                 }else{
                     JOptionPane.showMessageDialog(Application.window,"Debe ingresar nombre de usuario y contrasenia");
@@ -107,7 +109,6 @@ public class View implements Observer {
                 loginPanel.setVisible(false);
                 bodyPanel.setVisible(false);
                 RegisterPanel.setVisible(true);
-
             }
         });
         iniciarSesionButton.addActionListener(new ActionListener() {
@@ -141,6 +142,9 @@ public class View implements Observer {
                     controller.AddContact(AgregarContacto.getText());
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(bodyPanel,ex.getMessage());
+                }
+                finally {
+                    AgregarContacto.setText("");
                 }
             }
         });
@@ -215,9 +219,9 @@ public class View implements Observer {
             Application.window.getRootPane().setDefaultButton(post);
             if (prop == Model.CHAT) {
                 this.messages.setText("");
-                String text = "Chat con: "+model.getCurrentContact()+"\n";
-                messages.setText(text);
                 if(model.getCurrentContact() != null) {
+                    String text = "Chat con: "+model.getCurrentContact()+"\n";
+                    messages.setText(text);
                     for (Message m : model.getCurrentContact().getMensajes()) {
                         if (m.getSender().equals(model.getCurrentUser().getNombre())) {
                             text += ("Me:" + m.getMessage() + "\n");

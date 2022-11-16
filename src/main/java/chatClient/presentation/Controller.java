@@ -163,6 +163,7 @@ public class Controller {
         
     public void deliver(@NotNull Message message){
         boolean MensajeEnviado = false;
+        boolean MensajeRecibido = false;
         if(message.getSender().equals(model.currentUser.getNombre())){
             MensajeEnviado = true;
         }
@@ -173,6 +174,7 @@ public class Controller {
                     agregarMensajeAllContactos(c);
                     XMLParse.creaXML(Model.allContacts);
                     model.commit(Model.CHAT);
+                    MensajeRecibido = true;
                 }
             }
         }else{
@@ -182,7 +184,21 @@ public class Controller {
                     agregarMensajeAllContactos(c);
                     XMLParse.creaXML(Model.allContacts);
                     model.commit(Model.CHAT);
+                    MensajeRecibido = true;
                 }
+            }
+        }
+        if(!MensajeRecibido){
+            try {
+                AddContact(message.getSender());
+                for(Contacto c: model.contactos){
+                    if(c.getNombreContacto().equals(message.getSender())){
+                        c.AgregarMensaje(message);
+                        model.commit(Model.CHAT);
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }

@@ -124,7 +124,7 @@ public class ServiceProxy implements IService{
             }
             else {
                 disconnect();
-                throw new Exception("No remote user");
+                throw new Exception("Error al loguearse");
             }            
         } catch (IOException | ClassNotFoundException ex) {
             return null;
@@ -188,6 +188,7 @@ public class ServiceProxy implements IService{
                             break;
 
                         case Protocol.ERROR_ADDCONTACT:
+                            JOptionPane.showMessageDialog(null,"Error al agregar Contacto");
                             System.out.println("No se agrego");
                             break;
 
@@ -210,12 +211,12 @@ public class ServiceProxy implements IService{
         }
     }
     
-   private void deliver(final Message message ){
+   private void deliver(final Message message){
       SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                controller.deliver(message);
             }
          }
       );
-   }
+  }
 }
