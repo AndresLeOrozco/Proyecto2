@@ -2,12 +2,14 @@ package chatClient.logic;
 
 import chatClient.presentation.Controller;
 import chatProtocol.*;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -214,7 +216,15 @@ public class ServiceProxy implements IService{
    private void deliver(final Message message){
       SwingUtilities.invokeLater(new Runnable(){
             public void run(){
-               controller.deliver(message);
+                try {
+                    controller.deliver(message);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (ParserConfigurationException e) {
+                    throw new RuntimeException(e);
+                } catch (SAXException e) {
+                    throw new RuntimeException(e);
+                }
             }
          }
       );

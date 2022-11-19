@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Model extends java.util.Observable {
 
-   static public List<Contacto> allContacts;
+
     User currentUser;
 
 
@@ -44,15 +44,7 @@ public class Model extends java.util.Observable {
     List<Contacto> contactos;
 
     public Model() {
-        try {
-            allContacts = XMLParse.LeerXML();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
+
         currentUser = null;
        contactos = new ArrayList<>();
        currentContact = null;

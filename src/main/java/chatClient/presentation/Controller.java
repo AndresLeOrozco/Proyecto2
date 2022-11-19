@@ -7,8 +7,11 @@ import chatProtocol.Contacto;
 import chatProtocol.Message;
 import chatProtocol.User;
 import org.jetbrains.annotations.NotNull;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +77,7 @@ public class Controller {
 
     public void agregaContactos(){
         List<Contacto> conts = new ArrayList<>();
-        for(Contacto co:Model.allContacts){
+        for(Contacto co:Application.allContacts){
             if(co.getNombreDuenoContacto().equals(model.currentUser.getNombre())){
                 conts.add(co);
             }
@@ -125,9 +128,8 @@ public class Controller {
     }
 
     public void AgregaAlaListaDeContactos(Contacto c){
-        model.contactos.add(c);
-        Model.allContacts.add(c);
-        XMLParse.creaXML(Model.allContacts);
+        Application.agregarCont(c);
+        agregaContactos();
         model.commit(Model.AddContact);
     }
     public void Register(User u)throws Exception{
@@ -147,10 +149,10 @@ public class Controller {
     public void logout(){
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
-            XMLParse.creaXML(Model.allContacts);
             View nueva = new View();
             Model moNuevo = new Model();
             Controller newCo = new Controller(nueva,moNuevo);
+            Application.allContacts = XMLParse.LeerXML();
             Application.window.setContentPane(newCo.view.getPanel());
             Application.window.getContentPane().repaint();
             Application.window.getContentPane().revalidate();
@@ -161,7 +163,7 @@ public class Controller {
 
     }
         
-    public void deliver(@NotNull Message message){
+    public void deliver(@NotNull Message message) throws IOException, ParserConfigurationException, SAXException {
         boolean MensajeEnviado = false;
         boolean MensajeRecibido = false;
         if(message.getSender().equals(model.currentUser.getNombre())){
@@ -170,9 +172,10 @@ public class Controller {
         if(MensajeEnviado) {
             for (Contacto c : model.contactos) {
                 if (message.getUserDeliver().equals(c.getNombreContacto())) {
+                    Application.allContacts = XMLParse.LeerXML();
                     c.AgregarMensaje(message);
-                    agregarMensajeAllContactos(c);
-                    XMLParse.creaXML(Model.allContacts);
+                    agregarMensajeAllContactos(c,message);
+                    XMLParse.creaXML(Application.allContacts);
                     model.commit(Model.CHAT);
                     MensajeRecibido = true;
                 }
@@ -180,9 +183,10 @@ public class Controller {
         }else{
             for (Contacto c : model.contactos){
                 if (message.getSender().equals(c.getNombreContacto())){
+                    Application.allContacts = XMLParse.LeerXML();
                     c.AgregarMensaje(message);
-                    agregarMensajeAllContactos(c);
-                    XMLParse.creaXML(Model.allContacts);
+                    agregarMensajeAllContactos(c,message);
+                    XMLParse.creaXML(Application.allContacts);
                     model.commit(Model.CHAT);
                     MensajeRecibido = true;
                 }
@@ -190,6 +194,7 @@ public class Controller {
         }
         if(!MensajeRecibido){
             try {
+                Application.allContacts = XMLParse.LeerXML();
                 AddContact(message.getSender());
                 for(Contacto c: model.contactos){
                     if(c.getNombreContacto().equals(message.getSender())){
@@ -197,15 +202,17 @@ public class Controller {
                         model.commit(Model.CHAT);
                     }
                 }
+                XMLParse.creaXML(Application.allContacts);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    public void agregarMensajeAllContactos(Contacto con){
-        for(Contacto c:Model.allContacts){
-            if(c.getNombreContacto().equals(con.getNombreContacto()) && c.getNombreDuenoContacto().equals(con.getNombreContacto())){
+    public void agregarMensajeAllContactos(Contacto con,Message m){
+
+        for(Contacto c:Application.allContacts){
+            if(c.getNombreContacto().equals(con.getNombreContacto()) && c.getNombreDuenoContacto().equals(con.getNombreDuenoContacto())){
                 c.setMensajes(con.getMensajes());
                 c.setCantMessage(con.getCantMessage());
             }
