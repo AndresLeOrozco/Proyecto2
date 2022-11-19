@@ -195,13 +195,12 @@ public class Controller {
         if(!MensajeRecibido){
             try {
                 Application.allContacts = XMLParse.LeerXML();
-                AddContact(message.getSender());
-                for(Contacto c: model.contactos){
-                    if(c.getNombreContacto().equals(message.getSender())){
-                        c.AgregarMensaje(message);
-                        model.commit(Model.CHAT);
-                    }
-                }
+                Contacto con = new Contacto(new ArrayList<Message>(),true,message.getSender(),model.getCurrentUser().getNombre());
+                localService.enviarContacto(con,model.currentUser);
+                con.AgregarMensaje(message);
+                model.contactos.add(con);
+                Application.allContacts.add(con);
+                model.commit(Model.AddContact);
                 XMLParse.creaXML(Application.allContacts);
             } catch (Exception e) {
                 throw new RuntimeException(e);

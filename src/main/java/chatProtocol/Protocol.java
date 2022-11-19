@@ -27,4 +27,6 @@ public class Protocol {
     public static final int ESTADOOFF = 9;
 
     public static final int ESTADOCONTACTOS = 11;
+
+    public static final int AGREGACONTA = 12;
 }

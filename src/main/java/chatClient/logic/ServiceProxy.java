@@ -212,6 +212,16 @@ public class ServiceProxy implements IService{
             }
         }
     }
+
+    public void enviarContacto(Contacto co,User u){
+        try {
+            out.writeInt(Protocol.AGREGACONTA);
+            out.writeObject(co);
+            out.writeObject(u);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     
    private void deliver(final Message message){
       SwingUtilities.invokeLater(new Runnable(){

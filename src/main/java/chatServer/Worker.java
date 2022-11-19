@@ -80,7 +80,20 @@ public class Worker {
                                 co.setEstado(srv.UsuarioLogeado(NoCo));
                                 out.writeInt(Protocol.SUCCESSADDCONTACT);
                                 out.writeObject(co);
+
                             }
+                        break;
+
+                    case Protocol.AGREGACONTA:
+                        Contacto c = (Contacto) in.readObject();
+                        User us = (User) in.readObject();
+                        Contacto con = service.addContact(us,c.getNombreContacto(),null);
+                        if(con == null) {
+                            System.out.println("Contacto no Agregado");
+                        }
+                        else{
+                            System.out.println("Contacto agregado");
+                        }
                         break;
                 }
                 out.flush();
