@@ -1,5 +1,7 @@
 package chatClient.logic;
 
+import chatClient.Application;
+import chatClient.Data.XMLParse;
 import chatClient.presentation.Controller;
 import chatProtocol.*;
 import org.xml.sax.SAXException;
@@ -106,6 +108,7 @@ public class ServiceProxy implements IService{
                 for(int i=0;i<cantUsuariosLoggeados;i++){
                     usuariosLogs.add(in.readUTF());
                 }
+                Application.allContacts = XMLParse.LeerXML();
                 controller.setCurrentUser(u1);
                 controller.setUsuariosLoggs(usuariosLogs);
                 controller.agregaContactos();

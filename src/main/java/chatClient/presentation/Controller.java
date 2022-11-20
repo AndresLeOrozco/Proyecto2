@@ -148,6 +148,7 @@ public class Controller {
 
     public void logout(){
         try {
+
             ServiceProxy.instance().logout(model.getCurrentUser());
             View nueva = new View();
             Model moNuevo = new Model();
@@ -226,6 +227,7 @@ public class Controller {
                 }
             }
         }
+        XMLParse.creaXML(Application.allContacts);
     }
 
     public void setConversacion(Contacto c){
